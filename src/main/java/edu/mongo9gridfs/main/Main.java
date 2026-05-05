@@ -4,7 +4,8 @@ import edu.mongo9gridfs.gui.SWTFoxGUI;
 
 public class Main {
     public static void main(String[] args) {
-        SWTFoxGUI gui = new SWTFoxGUI();
+
+        SWTFoxGUI gui = new SWTFoxGUI(null);
         gui.start();
     }
 }

@@ -6,6 +6,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
+import edu.mongo9gridfs.main.FileService;
 import org.bson.types.ObjectId;
 
 import java.io.File;
@@ -18,7 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MongoGridFsService {
+public class MongoGridFsService implements FileService {
     MongoClient client;
     MongoDatabase database;
     GridFSBucket bucket;
