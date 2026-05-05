@@ -7,6 +7,7 @@ import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import edu.mongo9gridfs.main.FileService;
+import org.bson.BsonObjectId;
 import org.bson.types.ObjectId;
 
 import java.io.File;
@@ -69,7 +70,7 @@ public class MongoGridFsService implements FileService {
             System.out.println("ObjectID is null. Cannot download");
             return false;
         }
-        ObjectId fileId = (ObjectId) objectId;
+        BsonObjectId  fileId = (BsonObjectId) objectId;
         File file = new File(filePath);
         try(FileOutputStream stream = new FileOutputStream(file)){
             bucket.downloadToStream(fileId, stream);
@@ -85,7 +86,7 @@ public class MongoGridFsService implements FileService {
             System.out.println("ObjectID is null. Cannot delete");
             return false;
         }
-        ObjectId fileId = (ObjectId) objectId;
+        BsonObjectId fileId = (BsonObjectId) objectId;
         try{
             bucket.delete(fileId);
             return true;
