@@ -22,8 +22,8 @@
             <scope>system</scope>
             <systemPath>${pom.basedir}/libs/swt.jar</systemPath>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>swt</groupId>-->
+<!--        <dependency>-->                             <!-- SWT-AWT no more needed since i switched to AWT with null parent frame,   -->
+<!--            <groupId>swt</groupId>-->               <!-- but i want to hold the library in the repository -->
 <!--            <artifactId>swt-awt</artifactId>-->
 <!--            <version>1.0</version>-->
 <!--            <scope>system</scope>-->

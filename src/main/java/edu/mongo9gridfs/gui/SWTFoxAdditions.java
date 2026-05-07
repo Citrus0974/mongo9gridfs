@@ -2,9 +2,10 @@ package edu.mongo9gridfs.gui;
 
 import org.eclipse.swt.widgets.Shell;
 
+//AI-Generated JNI-adaptations (by Google Search AI)
 public class SWTFoxAdditions {
     public static int showNativeError(Shell shell, String title, String message) {
-        // Using the constants directly from your OS class
+        // Using the constants directly from OS class
         int opts = org.eclipse.swt.internal.fox.OS.MBOX_OK |
                 org.eclipse.swt.internal.fox.OS.DECOR_TITLE |
                 org.eclipse.swt.internal.fox.OS.DECOR_BORDER;

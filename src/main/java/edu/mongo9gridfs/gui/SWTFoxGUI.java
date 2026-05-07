@@ -23,10 +23,11 @@ public class SWTFoxGUI implements GUI {
     }
 
     public void start(){
-        int margin = 10;
-        int gap = 50;
+        int margin = 10;            //Default space between table and windows edges
+        int gap = 50;               //Default space between buttons and table/edges
         int buttonHeight = 35;
 
+        //Window and components initialization
         Display display = new Display();
         Shell mainWindow = new Shell(display);
         Table filesTable = new Table(mainWindow, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL);
@@ -37,21 +38,22 @@ public class SWTFoxGUI implements GUI {
         Button downloadButton = new Button(buttonBar, SWT.CENTER);
         Button deleteButton = new Button(buttonBar, SWT.CENTER);
 
+        //Window Settings
         mainWindow.setSize(1280, 720);
         mainWindow.setLayout(null);
         mainWindow.setText(windowTitle);
 
+        //Buttons settings
         refreshButton.setText("Refresh Table");
         uploadButton.setText("Upload File");
         downloadButton.setText("Download File");
         deleteButton.setText("Delete File");
 
-        refreshButton.addListener(SWT.Selection, event -> {
-            updateTable(filesTable, fileService.getFilesInfo());
-        });
-        uploadButton.addListener(SWT.Selection, event -> {
-//            Frame bridgeFrame = SWT_AWT.new_Frame(bridgeHandle);
-            FileDialog fd = new FileDialog((Frame)null, "Select File", FileDialog.LOAD);
+        //Buttons' actions
+        refreshButton.addListener(SWT.Selection, event -> updateTable(filesTable, fileService.getFilesInfo()));
+        uploadButton.addListener(SWT.Selection, event -> {                                //Using swt-awt led to annoying "EmbeddedJavaFrame"
+//            Frame bridgeFrame = SWT_AWT.new_Frame(bridgeHandle);                              //invisible windows stuck in background in my kde setup.
+            FileDialog fd = new FileDialog((Frame)null, "Select File", FileDialog.LOAD);     //So used awt with "null" awt init instead of swt-awt
             fd.setVisible(true);
             String directory = fd.getDirectory();
             String filename = fd.getFile();
@@ -63,12 +65,9 @@ public class SWTFoxGUI implements GUI {
             if(uploaded==null){
                 SWTFoxAdditions.showNativeError(mainWindow, "FileService Error", "File was not uploaded");
             } else{
-                SWTFoxAdditions.showNativeInfo(mainWindow, "Success", "File Uploaded. New ID: " + uploaded.toString());
+                SWTFoxAdditions.showNativeInfo(mainWindow, "Success", "File Uploaded. New ID: " + uploaded);
                 updateTable(filesTable, fileService.getFilesInfo());
             }
-//            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-//                    new WindowEvent(new Frame(), WindowEvent.WINDOW_CLOSING)
-//            );
         });
         downloadButton.addListener(SWT.Selection, event -> {
             TableItem[] selected = filesTable.getSelection();
@@ -86,7 +85,7 @@ public class SWTFoxGUI implements GUI {
             String filename = sd.getFile();
             if(filename==null){
                 System.out.println("cancelled");
-//                SWTFoxAdditions.showNativeError(mainWindow, "Error", "You should select destination file");
+                SWTFoxAdditions.showNativeError(mainWindow, "Error", "You should select destination file");
             } else {
                 String fullPath = directory + filename;
                 boolean downloaded = fileService.downloadFile(fileId, fullPath);
@@ -127,7 +126,7 @@ public class SWTFoxGUI implements GUI {
         });
 //        bridgeHandle.setVisible(false);
 
-
+        //Table settings, Columns initialization
         filesTable.setHeaderVisible(true);
         filesTable.setLinesVisible(true);
         TableColumn nameCol = new TableColumn(filesTable, SWT.NONE);
@@ -143,10 +142,10 @@ public class SWTFoxGUI implements GUI {
             dateCol.setWidth((int)(tableWidth*0.25));
         });
 
-        updateTable(filesTable, fileService.getFilesInfo());
+        updateTable(filesTable, fileService.getFilesInfo()); //Initial table population
 
 
-
+        //Main window functionality
         mainWindow.addListener(SWT.Resize, event -> {
             Rectangle clientArea = mainWindow.getClientArea();
             if(clientArea.width<640 || clientArea.height<360) return;
@@ -157,7 +156,7 @@ public class SWTFoxGUI implements GUI {
         });
 
         mainWindow.open();
-        mainWindow.addListener(SWT.Close, event -> {
+        mainWindow.addListener(SWT.Close, event -> { //Using this to shut down both SWT and AWT at the same time
             System.exit(0);
         });
         while(!mainWindow.isDisposed()){
@@ -180,9 +179,4 @@ public class SWTFoxGUI implements GUI {
             }
         }
     }
-
-//    private void customizeButton(Button button, String text, int width, int height){
-//        button.setText(text);
-//        button.setSize(width, height);
-//    }
 }

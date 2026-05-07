@@ -8,7 +8,6 @@ import com.mongodb.client.gridfs.GridFSBuckets;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import edu.mongo9gridfs.main.FileService;
 import org.bson.BsonObjectId;
-import org.bson.types.ObjectId;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,11 +25,11 @@ public class MongoGridFsService implements FileService {
     GridFSBucket bucket;
 
     public MongoGridFsService(String connection, String database){
-        this.client = MongoClients.create(connection);
-        this.database = client.getDatabase(database);
-        this.bucket = GridFSBuckets.create(this.database);
+        this.client = MongoClients.create(connection);      //Create connection immediately
+        this.database = client.getDatabase(database);       //Get database object immediately
+        this.bucket = GridFSBuckets.create(this.database);  //Get bucket object immediately
     }
-
+    //Read ALL files data from MongoDB Collection
     public Map<Object, List<String>> getFilesInfo(){
         Map<Object, List<String>> allFilesInfo = new LinkedHashMap<>();
         for(GridFSFile gridFSFile: bucket.find()){
@@ -42,7 +41,7 @@ public class MongoGridFsService implements FileService {
         }
         return allFilesInfo;
     }
-
+    //Construction of File Size string
     private String formatFileSize(long byteSize){
         char[] sizeChars = {'k', 'm', 'g'};
         long orderSize = 1024L;
@@ -65,6 +64,8 @@ public class MongoGridFsService implements FileService {
         return uploaded;
     }
 
+    //Object casting to BsonObjectId. BsonObjectId should be stored somewhere inside gui,
+    // like "data" object in TableItem in SWT
     public boolean downloadFile(Object objectId, String filePath){
         if(objectId==null){
             System.out.println("ObjectID is null. Cannot download");
